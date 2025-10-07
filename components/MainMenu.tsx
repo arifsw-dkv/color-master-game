@@ -13,16 +13,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
         Platform Edukasi Interaktif untuk Desain Komunikasi Visual
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Color Studio */}
-        <button
-          onClick={() => onSelectMode(GameMode.Studio)}
-          className="md:col-span-2 bg-gradient-to-br from-cyan-500 to-purple-600 p-6 rounded-lg hover:from-cyan-400 hover:to-purple-500 transition-all duration-300 transform hover:-translate-y-1 group shadow-lg hover:shadow-cyan-500/50"
-        >
-          <h2 className="text-3xl font-bold text-white mb-2">Color Studio</h2>
-          <p className="text-gray-200 text-lg">Alat profesional untuk palet, ekstraksi, & aksesibilitas.</p>
-        </button>
-
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Guess The Color */}
         <button
           onClick={() => onSelectMode(GameMode.GuessTheColor)}
@@ -58,14 +49,26 @@ const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
           <h2 className="text-2xl font-bold text-yellow-400 mb-2">Lab Pencampuran</h2>
           <p className="text-gray-400 group-hover:text-gray-200">Eksplorasi pencampuran warna RGB secara bebas.</p>
         </button>
+        
+        {/* Color Studio */}
+        <button
+          onClick={() => onSelectMode(GameMode.Studio)}
+          className="bg-gray-700 p-6 rounded-lg hover:bg-indigo-800 transition-all duration-300 transform hover:-translate-y-1 group"
+        >
+          <h2 className="text-2xl font-bold text-indigo-400 mb-2">Color Studio</h2>
+          <p className="text-gray-400 group-hover:text-gray-200">Alat pro untuk palet & aksesibilitas.</p>
+        </button>
+
+        {/* Instructions */}
+        <button
+          onClick={() => onSelectMode(GameMode.Instructions)}
+          className="bg-gray-700 p-6 rounded-lg hover:bg-green-800 transition-all duration-300 transform hover:-translate-y-1 group"
+        >
+          <h2 className="text-2xl font-bold text-green-400 mb-2">Instruksi</h2>
+          <p className="text-gray-400 group-hover:text-gray-200">Pelajari cara bermain & menggunakan alat.</p>
+        </button>
       </div>
       
-      <button
-        onClick={() => onSelectMode(GameMode.Instructions)}
-        className="text-gray-400 hover:text-cyan-400 font-semibold transition-colors duration-200"
-      >
-        Lihat Instruksi
-      </button>
       <style>{`
         .animate-pulse-glow {
           animation: pulse-glow 4s ease-in-out infinite;
