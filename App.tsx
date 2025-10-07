@@ -21,17 +21,11 @@ const App: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerData | null>(null);
   
   useEffect(() => {
-    if (gameMode === GameMode.MainMenu) {
-      musicService.playMenuMusic();
-    } else {
-      musicService.stopMusic();
-    }
-    
-    // Cleanup function to stop music when component unmounts
+    // Cleanup function to stop music when the entire app unmounts
     return () => {
       musicService.stopMusic();
     }
-  }, [gameMode]);
+  }, []);
 
   useEffect(() => {
     const handlePlayerDataUpdate = () => {
@@ -52,9 +46,18 @@ const App: React.FC = () => {
 
 
   const handleSelectMode = (mode: GameMode) => {
-    soundService.init(); // Ensure audio context is ready
-    musicService.init(); // Ensure music context is ready
+    // Initialize sound effects on first user interaction
+    soundService.init(); 
     soundService.playClickSound();
+
+    // Music service initializes itself lazily.
+    // Directly control music based on the new mode, ensuring it's tied to a user gesture.
+    if (mode === GameMode.MainMenu) {
+      musicService.playMenuMusic();
+    } else {
+      musicService.stopMusic();
+    }
+    
     setGameMode(mode);
   };
   
