@@ -7,13 +7,13 @@ interface MainMenuProps {
 
 const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
   return (
-    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg animate-fade-in max-w-4xl">
+    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-lg animate-fade-in max-w-2xl w-full">
       <h1 className="text-5xl font-bold mb-2 text-cyan-400 animate-pulse-glow">ColorMaster DKV</h1>
       <p className="text-xl font-light text-gray-300 mb-10 max-w-lg mx-auto">
         Platform Edukasi Interaktif untuk Desain Komunikasi Visual
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Guess The Color */}
         <button
           onClick={() => onSelectMode(GameMode.GuessTheColor)}
@@ -49,11 +49,13 @@ const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
           <h2 className="text-2xl font-bold text-yellow-400 mb-2">Lab Pencampuran</h2>
           <p className="text-gray-400 group-hover:text-gray-200">Eksplorasi pencampuran warna RGB secara bebas.</p>
         </button>
-        
-        {/* Color Studio */}
+      </div>
+      
+      <div className="space-y-4">
+         {/* Color Studio */}
         <button
           onClick={() => onSelectMode(GameMode.Studio)}
-          className="bg-gray-700 p-6 rounded-lg hover:bg-indigo-800 transition-all duration-300 transform hover:-translate-y-1 group"
+          className="w-full bg-gray-700 p-6 rounded-lg hover:bg-indigo-800 transition-all duration-300 transform hover:-translate-y-1 group"
         >
           <h2 className="text-2xl font-bold text-indigo-400 mb-2">Color Studio</h2>
           <p className="text-gray-400 group-hover:text-gray-200">Alat pro untuk palet & aksesibilitas.</p>
@@ -62,13 +64,13 @@ const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
         {/* Instructions */}
         <button
           onClick={() => onSelectMode(GameMode.Instructions)}
-          className="bg-gray-700 p-6 rounded-lg hover:bg-green-800 transition-all duration-300 transform hover:-translate-y-1 group"
+          className="w-full bg-gray-700 p-6 rounded-lg hover:bg-green-800 transition-all duration-300 transform hover:-translate-y-1 group"
         >
           <h2 className="text-2xl font-bold text-green-400 mb-2">Instruksi</h2>
           <p className="text-gray-400 group-hover:text-gray-200">Pelajari cara bermain & menggunakan alat.</p>
         </button>
       </div>
-      
+
       <style>{`
         .animate-pulse-glow {
           animation: pulse-glow 4s ease-in-out infinite;
