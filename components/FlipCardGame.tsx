@@ -165,28 +165,33 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
     const isShaking = unmatchedPair.includes(index);
     const isPulsing = justMatchedPairId === card.pairId;
 
+    // Conditionally apply transition classes based on user's effects settings
+    const transitionClass = allowEffects ? 'duration-500 ease-in-out' : 'duration-0';
+
     const matchedStyle = card.isMatched 
-      ? 'opacity-70 ring-2 ring-teal-400'
+      ? 'opacity-60 ring-2 ring-teal-400'
       : 'bg-gray-900';
       
     const cardContentColor = card.type === 'color' 
       ? getContrastingTextColor(card.pairId) 
       : '#FFFFFF';
     
+    // Add a shadow to the container for better depth perception.
+    // The group class allows for hover effects on child elements.
     return (
       <div 
         key={card.id} 
-        className={`${cardSettings.cardSize} perspective-1000`}
+        className={`${cardSettings.cardSize} perspective-1000 cursor-pointer group shadow-lg rounded-lg`}
         onClick={() => handleCardClick(index)}
       >
-        <div className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${card.isFlipped || card.isMatched ? 'rotate-y-180' : ''} ${isShaking ? 'animate-shake' : ''} ${isPulsing ? 'animate-pulse-once' : ''}`}>
-          {/* Card Back */}
-          <div className="absolute w-full h-full backface-hidden bg-gray-700 rounded-lg flex items-center justify-center text-3xl font-bold text-red-400 cursor-pointer hover:bg-gray-600">
+        <div className={`relative w-full h-full transition-transform ${transitionClass} transform-style-3d ${card.isFlipped || card.isMatched ? 'rotate-y-180' : ''} ${isShaking ? 'animate-shake' : ''} ${isPulsing ? 'animate-pulse-once' : ''}`}>
+          {/* Card Back - improved visuals with gradient and border */}
+          <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center text-4xl font-bold text-red-400 group-hover:from-gray-600 group-hover:to-gray-700 border-2 border-gray-600">
             ?
           </div>
-          {/* Card Front */}
+          {/* Card Front - improved visuals with border */}
           <div 
-            className={`absolute w-full h-full backface-hidden rotate-y-180 rounded-lg flex items-center justify-center p-2 text-center font-bold text-lg md:text-xl ${matchedStyle}`}
+            className={`absolute w-full h-full backface-hidden rotate-y-180 rounded-lg flex items-center justify-center p-2 text-center font-bold text-lg md:text-xl ${matchedStyle} border-2 ${card.type === 'color' ? 'border-gray-800' : 'border-gray-600'}`}
             style={card.type === 'color' ? { backgroundColor: card.pairId } : {}}
           >
             <span style={{ color: cardContentColor, textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}>
@@ -258,19 +263,20 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
                 .backface-hidden { backface-visibility: hidden; }
 
                 @keyframes shake {
-                  10%, 90% { transform: translateX(-2px) rotateY(180deg); }
-                  20%, 80% { transform: translateX(4px) rotateY(180deg); }
-                  30%, 50%, 70% { transform: translateX(-6px) rotateY(180deg); }
-                  40%, 60% { transform: translateX(6px) rotateY(180deg); }
+                  10%, 90% { transform: translate3d(-1px, 0, 0) rotateY(180deg); }
+                  20%, 80% { transform: translate3d(2px, 0, 0) rotateY(180deg); }
+                  30%, 50%, 70% { transform: translate3d(-4px, 0, 0) rotateY(180deg); }
+                  40%, 60% { transform: translate3d(4px, 0, 0) rotateY(180deg); }
                 }
                 .animate-shake {
-                  animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+                  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+                  transform: translate3d(0, 0, 0);
                 }
 
                 @keyframes pulse-once {
-                  0% { transform: scale(1) rotateY(180deg); }
-                  50% { transform: scale(1.1) rotateY(180deg); }
-                  100% { transform: scale(1) rotateY(180deg); }
+                  0% { transform: scale3d(1, 1, 1) rotateY(180deg); }
+                  50% { transform: scale3d(1.05, 1.05, 1.05) rotateY(180deg); }
+                  100% { transform: scale3d(1, 1, 1) rotateY(180deg); }
                 }
                 .animate-pulse-once {
                     animation: pulse-once 0.4s ease-in-out;

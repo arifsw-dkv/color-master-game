@@ -41,14 +41,14 @@ const ColorMixerLab: React.FC<ColorMixerLabProps> = ({ onGoToMainMenu }) => {
   return (
     <>
       {mode === 'selection' && renderModeSelection()}
-      {mode === 'explore' && <ExploreMode onGoToSelection={() => setMode('selection')} />}
-      {mode === 'challenge' && <ChallengeMode onGoToSelection={() => setMode('selection')} />}
+      {mode === 'explore' && <ExploreMode onGoToSelection={() => setMode('selection')} onGoToMainMenu={onGoToMainMenu} />}
+      {mode === 'challenge' && <ChallengeMode onGoToSelection={() => setMode('selection')} onGoToMainMenu={onGoToMainMenu} />}
     </>
   );
 };
 
 // --- Explore Mode Component ---
-const ExploreMode = ({ onGoToSelection }: { onGoToSelection: () => void }) => {
+const ExploreMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: () => void; onGoToMainMenu: () => void; }) => {
   const [r, setR] = useState(Math.floor(Math.random() * 256));
   const [g, setG] = useState(Math.floor(Math.random() * 256));
   const [b, setB] = useState(Math.floor(Math.random() * 256));
@@ -77,6 +77,11 @@ const ExploreMode = ({ onGoToSelection }: { onGoToSelection: () => void }) => {
           Pilih Mode Lain
         </button>
       </div>
+       <div className="text-center mt-4">
+        <button onClick={onGoToMainMenu} className="text-gray-400 hover:text-cyan-400 font-semibold transition-colors duration-200">
+          Kembali ke Menu Utama
+        </button>
+      </div>
     </div>
   );
 };
@@ -84,7 +89,7 @@ const ExploreMode = ({ onGoToSelection }: { onGoToSelection: () => void }) => {
 // --- Challenge Mode Component ---
 const TOTAL_CHALLENGE_ROUNDS = 5;
 
-const ChallengeMode = ({ onGoToSelection }: { onGoToSelection: () => void }) => {
+const ChallengeMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: () => void; onGoToMainMenu: () => void; }) => {
     const [gameState, setGameState] = useState<'playing' | 'roundEnd' | 'gameOver'>('playing');
     const [currentRound, setCurrentRound] = useState(1);
     const [totalScore, setTotalScore] = useState(0);
@@ -142,7 +147,7 @@ const ChallengeMode = ({ onGoToSelection }: { onGoToSelection: () => void }) => 
                 <p className="text-7xl font-bold text-cyan-400 mb-8">{totalScore}</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button onClick={handlePlayAgain} className="bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg text-lg hover:bg-yellow-400 transition-all">Main Lagi</button>
-                    <button onClick={onGoToSelection} className="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-500 transition-all">Menu Utama</button>
+                    <button onClick={onGoToMainMenu} className="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-500 transition-all">Menu Utama</button>
                 </div>
             </div>
         );
@@ -200,6 +205,11 @@ const ChallengeMode = ({ onGoToSelection }: { onGoToSelection: () => void }) => 
                     </button>
                  </div>
             )}
+            <div className="text-center mt-8">
+                <button onClick={onGoToMainMenu} className="text-gray-400 hover:text-cyan-400 font-semibold transition-colors duration-200">
+                    Kembali ke Menu Utama
+                </button>
+            </div>
         </div>
     );
 }
