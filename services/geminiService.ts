@@ -1,5 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
-import { Difficulty } from '../types';
+import { GoogleGenAI, Type } from "@google/genai";
+import { Difficulty, ColorInfo } from '../types';
 
 const API_KEY = process.env.API_KEY;
 
@@ -47,5 +47,85 @@ export async function getColorFacts(colorName: string, difficulty: Difficulty): 
   } catch (error) {
     console.error("Error fetching color facts from Gemini API:", error);
     return "Maaf, terjadi kesalahan saat mengambil informasi tambahan tentang warna ini. Silakan coba lagi.";
+  }
+}
+
+const paletteSchema = {
+  type: Type.OBJECT,
+  properties: {
+    palette: {
+      type: Type.ARRAY,
+      description: 'An array of 5 color objects that form a harmonious palette.',
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          name: {
+            type: Type.STRING,
+            description: 'A creative and descriptive name for the color.',
+          },
+          hex: {
+            type: Type.STRING,
+            description: 'The hexadecimal color code, starting with #.',
+          },
+        },
+        required: ['name', 'hex'],
+      },
+    },
+  },
+  required: ['palette'],
+};
+
+export async function getPaletteFromPrompt(prompt: string): Promise<ColorInfo[]> {
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `Based on the theme "${prompt}", generate a harmonious and aesthetically pleasing color palette of 5 colors.`,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: paletteSchema,
+        systemInstruction: "You are an expert color palette generator for graphic designers. Always respond with valid JSON that matches the provided schema. The hex codes must be valid and start with a '#' symbol.",
+      },
+    });
+
+    const jsonText = response.text;
+    const result = JSON.parse(jsonText);
+    return result.palette || [];
+
+  } catch (error) {
+    console.error("Error fetching palette from prompt:", error);
+    throw new Error("Gagal membuat palet dari teks. Silakan coba prompt yang berbeda.");
+  }
+}
+
+export async function getPaletteFromImage(base64Image: string, mimeType: string): Promise<ColorInfo[]> {
+  const imagePart = {
+    inlineData: {
+      data: base64Image,
+      mimeType: mimeType,
+    },
+  };
+
+  const textPart = {
+    text: 'Extract a 5-color palette from this image. The palette should be harmonious and represent the main colors of the image.',
+  };
+
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: { parts: [imagePart, textPart] },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: paletteSchema,
+        systemInstruction: "You are an expert color palette extractor. Analyze the image and return a palette of 5 colors that are both dominant and harmonious. Always respond with valid JSON that matches the provided schema. The hex codes must be valid and start with a '#' symbol.",
+      },
+    });
+    
+    const jsonText = response.text;
+    const result = JSON.parse(jsonText);
+    return result.palette || [];
+
+  } catch (error) {
+    console.error("Error fetching palette from image:", error);
+    throw new Error("Gagal mengekstrak palet dari gambar. Coba gambar lain.");
   }
 }

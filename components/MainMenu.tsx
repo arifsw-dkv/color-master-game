@@ -14,6 +14,15 @@ const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Color Studio */}
+        <button
+          onClick={() => onSelectMode(GameMode.Studio)}
+          className="md:col-span-2 bg-gradient-to-br from-cyan-500 to-purple-600 p-6 rounded-lg hover:from-cyan-400 hover:to-purple-500 transition-all duration-300 transform hover:-translate-y-1 group shadow-lg hover:shadow-cyan-500/50"
+        >
+          <h2 className="text-3xl font-bold text-white mb-2">Color Studio</h2>
+          <p className="text-gray-200 text-lg">Alat profesional untuk palet, ekstraksi, & aksesibilitas.</p>
+        </button>
+
         {/* Guess The Color */}
         <button
           onClick={() => onSelectMode(GameMode.GuessTheColor)}

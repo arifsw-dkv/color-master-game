@@ -6,6 +6,11 @@ interface InstructionsScreenProps {
 
 const InstructionsScreen: React.FC<InstructionsScreenProps> = ({ onGoToMainMenu }) => {
   const instructions = [
+     {
+      title: 'Color Studio',
+      color: 'text-purple-400',
+      description: 'Alat profesional untuk desainer! Hasilkan palet warna dari deskripsi teks (misal: "hutan di musim gugur") atau ekstrak warna langsung dari gambar yang Anda unggah. Uji kontras warna untuk memastikan desain Anda dapat diakses oleh semua orang.',
+    },
     {
       title: 'Tebak Warna',
       color: 'text-cyan-400',
@@ -24,15 +29,15 @@ const InstructionsScreen: React.FC<InstructionsScreenProps> = ({ onGoToMainMenu 
     {
       title: 'Lab Pencampuran',
       color: 'text-yellow-400',
-      description: 'Bebaskan kreativitasmu! Geser slider Merah, Hijau, dan Biru untuk mencampur dan menemukan warna baru. Lihat kode HEX dan RGB secara real-time. Ini adalah mode eksplorasi tanpa skor.',
+      description: 'Mode tantangan menguji kemampuanmu mencocokkan warna target dengan slider RGB. Dapatkan poin berdasarkan akurasi. Mode eksplorasi memungkinkanmu mencampur warna dengan bebas untuk menemukan kombinasi sempurna.',
     },
   ];
 
   return (
     <div className="w-full max-w-4xl bg-gray-800/50 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-lg animate-fade-in text-left">
-      <h1 className="text-4xl font-bold mb-8 text-center text-cyan-400">Cara Bermain</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center text-cyan-400">Cara Bermain & Alat</h1>
       
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      <div className="space-y-6 mb-8">
         {instructions.map((item, index) => (
           <div key={index} className="bg-gray-900/50 p-6 rounded-lg border border-gray-700">
             <h2 className={`text-2xl font-bold ${item.color} mb-2`}>{item.title}</h2>

@@ -16,6 +16,7 @@ export enum GameMode {
   ColorMixer,
   FlipCard,
   Instructions,
+  Studio,
 }
 
 export enum Difficulty {

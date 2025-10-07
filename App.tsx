@@ -12,6 +12,7 @@ import PlayerInfo from './components/PlayerInfo';
 import SettingsModal from './components/SettingsModal';
 import LoginScreen from './components/LoginScreen';
 import InstructionsScreen from './components/InstructionsScreen';
+import StudioMode from './components/StudioMode';
 
 
 const App: React.FC = () => {
@@ -75,6 +76,8 @@ const App: React.FC = () => {
         return <FlipCardGame onGoToMainMenu={handleGoToMainMenu} />;
       case GameMode.Instructions:
         return <InstructionsScreen onGoToMainMenu={handleGoToMainMenu} />;
+      case GameMode.Studio:
+        return <StudioMode onGoToMainMenu={handleGoToMainMenu} />;
       case GameMode.MainMenu:
       default:
         return <MainMenu onSelectMode={handleSelectMode} />;
