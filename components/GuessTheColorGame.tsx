@@ -8,6 +8,7 @@ import ColorDisplay from './ColorDisplay';
 import LoadingSpinner from './LoadingSpinner';
 import Scoreboard from './Scoreboard';
 import Leaderboard from './Leaderboard';
+import FeedbackModal from './FeedbackModal';
 
 // Internal game state for this component
 enum GameState {
@@ -20,32 +21,6 @@ enum GameState {
 // Utility to shuffle an array
 const shuffleArray = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
-};
-
-// Helper to format Gemini's text response into basic HTML
-const formatFeedbackText = (text: string): string => {
-  const lines = text.trim().split('\n').filter(line => line.trim());
-  if (lines.length === 0) return '';
-
-  const processedLines = lines.map(line =>
-    line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-  );
-  
-  const isList = processedLines.some(line => /^\s*(\d+\.|\*|-)\s/.test(line));
-
-  if (isList) {
-    let listItems = processedLines.map(line => {
-      const content = line.replace(/^\s*(\d+\.|\*|-)\s/, '');
-      return `<li>${content}</li>`;
-    });
-    const isOrdered = /^\s*\d+\./.test(processedLines[0]);
-    const listTag = isOrdered ? 'ol' : 'ul';
-    const listClasses = isOrdered ? 'list-decimal' : 'list-disc';
-    
-    return `<${listTag} class="${listClasses} list-inside space-y-2">${listItems.join('')}</${listTag}>`;
-  } else {
-    return processedLines.map(line => `<p>${line}</p>`).join('');
-  }
 };
 
 interface GuessTheColorGameProps {
@@ -66,6 +41,7 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
   const [playerName, setPlayerName] = useState('');
   const [leaderboard, setLeaderboard] = useState<ScoreEntry[]>([]);
   const [isScoreSubmitted, setIsScoreSubmitted] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const currentPlayerScoreRef = useRef<ScoreEntry | null>(null);
 
   const generateQuizItem = useCallback(() => {
@@ -126,6 +102,8 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
   const handleAnswer = async (selectedOption: string) => {
     if (!quizItem) return;
 
+    setSelectedAnswer(selectedOption);
+
     const correct = selectedOption === quizItem.color.name;
     setIsCorrect(correct);
     if (correct) {
@@ -168,6 +146,7 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
       setQuizItem(null);
       setIsCorrect(null);
       setFeedbackText('');
+      setSelectedAnswer(null);
       setGameState(GameState.Playing);
     }
   };
@@ -220,26 +199,18 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
         );
 
       case GameState.Feedback:
+        if (!quizItem || selectedAnswer === null) return null; // Guard against missing data
         return (
-           <div className="w-full max-w-2xl bg-gray-800/50 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg animate-fade-in">
-              <h2 className={`text-3xl font-bold text-center mb-4 ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>{isCorrect ? 'Jawaban Benar!' : 'Kurang Tepat'}</h2>
-              <p className="text-center text-lg text-gray-300 mb-6">Warna <span className="font-mono font-bold">{quizItem?.color.hex}</span> adalah <span className="font-bold text-cyan-400">{quizItem?.color.name}</span>.</p>
-              <div className="bg-gray-900/70 p-4 rounded-lg min-h-[150px]">
-                {isLoading ? (
-                  <div className="flex items-center justify-center h-full"><LoadingSpinner /><span className="ml-3 text-gray-400">Memuat info dari Gemini...</span></div>
-                ) : (
-                  <div className="prose prose-invert text-gray-300 max-w-none" dangerouslySetInnerHTML={{ __html: formatFeedbackText(feedbackText) }} />
-                )}
-              </div>
-              <button onClick={nextRound} disabled={isLoading} className="mt-6 w-full bg-cyan-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl hover:bg-cyan-400 transition-all duration-300 disabled:bg-gray-600 disabled:cursor-not-allowed">
-                {isLoading ? 'Memuat...' : (currentRound >= TOTAL_ROUNDS ? 'Lihat Skor' : 'Lanjut')}
-              </button>
-              <div className="text-center mt-4">
-                <button onClick={onGoToMainMenu} className="text-gray-400 hover:text-cyan-400 font-semibold transition-colors duration-200 text-sm">
-                  Kembali ke Menu Utama
-                </button>
-              </div>
-            </div>
+          <FeedbackModal
+            isOpen={true}
+            isCorrect={isCorrect}
+            correctColor={quizItem.color}
+            selectedOptionName={selectedAnswer}
+            feedbackText={feedbackText}
+            isLoading={isLoading}
+            onNextRound={nextRound}
+            isLastRound={currentRound >= TOTAL_ROUNDS}
+          />
         );
         
       case GameState.GameOver:
