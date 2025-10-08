@@ -58,8 +58,8 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-      <div className="bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col animate-fade-in border-2 border-gray-700">
-        <h2 className={`text-3xl font-bold text-center mb-6 ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+      <div className="glass-panel w-full max-w-2xl rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col animate-fade-in">
+        <h2 className={`text-3xl font-bold text-center mb-6 font-heading ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
           {isCorrect ? 'Jawaban Benar!' : 'Kurang Tepat'}
         </h2>
 
@@ -101,7 +101,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
           )}
         </div>
         
-        <div className="bg-gray-900/70 p-4 rounded-lg min-h-[150px] w-full mt-4">
+        <div className="bg-black/20 p-4 rounded-lg min-h-[150px] w-full mt-4 border border-gray-700">
           {isLoading ? (
             <div className="flex items-center justify-center h-full">
               <LoadingSpinner />

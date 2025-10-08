@@ -34,13 +34,13 @@ const InstructionsScreen: React.FC<InstructionsScreenProps> = ({ onGoToMainMenu 
   ];
 
   return (
-    <div className="w-full max-w-4xl bg-gray-800/50 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-lg animate-fade-in text-left">
-      <h1 className="text-4xl font-bold mb-8 text-center text-cyan-400">Cara Bermain & Alat</h1>
+    <div className="w-full max-w-4xl glass-panel p-8 md:p-10 rounded-2xl shadow-lg animate-fade-in text-left">
+      <h1 className="text-4xl font-bold mb-8 text-center text-cyan-400 font-heading">Cara Bermain & Alat</h1>
       
-      <div className="space-y-6 mb-8">
+      <div className="space-y-6 mb-8 max-h-[60vh] overflow-y-auto pr-4 -mr-4">
         {instructions.map((item, index) => (
-          <div key={index} className="bg-gray-900/50 p-6 rounded-lg border border-gray-700">
-            <h2 className={`text-2xl font-bold ${item.color} mb-2`}>{item.title}</h2>
+          <div key={index} className="bg-black/20 p-6 rounded-lg border border-gray-700">
+            <h2 className={`text-2xl font-bold ${item.color} mb-2 font-heading`}>{item.title}</h2>
             <p className="text-gray-300 leading-relaxed">{item.description}</p>
           </div>
         ))}

@@ -85,13 +85,13 @@ const ColorWheelGame: React.FC<ColorWheelGameProps> = ({ onGoToMainMenu }) => {
   
   if (isGameOver) {
     return (
-       <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
-        <h1 className="text-4xl font-bold mb-4 text-purple-400">Permainan Selesai!</h1>
+       <div className="text-center glass-panel p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
+        <h1 className="text-4xl font-bold mb-4 text-purple-400 font-heading">Permainan Selesai!</h1>
         <p className="text-xl text-gray-300 mb-2">Skor Akhir Kamu:</p>
         <p className="text-7xl font-bold text-yellow-400 mb-8">{score}</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button onClick={handlePlayAgain} className="bg-purple-500 text-gray-900 font-bold py-3 px-6 rounded-lg text-lg hover:bg-purple-400 transition-all">Main Lagi</button>
-          <button onClick={onGoToMainMenu} className="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-500 transition-all">Menu Utama</button>
+          <button onClick={onGoToMainMenu} className="bg-gray-600/50 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-600/80 transition-all border border-gray-500">Menu Utama</button>
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ const ColorWheelGame: React.FC<ColorWheelGameProps> = ({ onGoToMainMenu }) => {
 
   return (
     <div className="w-full max-w-2xl text-center animate-fade-in">
-      <h1 className="text-4xl font-bold mb-2 text-purple-400">Roda Warna</h1>
+      <h1 className="text-4xl font-bold mb-2 text-purple-400 font-heading">Roda Warna</h1>
       <Scoreboard score={score} round={round} totalRounds={TOTAL_WHEEL_ROUNDS} />
       
       {question && (
@@ -138,7 +138,7 @@ const ColorWheelGame: React.FC<ColorWheelGameProps> = ({ onGoToMainMenu }) => {
       <div className="h-24">
         {isCorrect !== null && (
           <div className="animate-fade-in">
-              <h2 className={`text-3xl font-bold mb-4 ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+              <h2 className={`text-3xl font-bold mb-4 font-heading ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
                   {isCorrect ? 'Benar!' : 'Kurang Tepat!'}
               </h2>
               <button onClick={handleNext} className="bg-purple-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl hover:bg-purple-400 transition-all">

@@ -170,7 +170,7 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
 
     const matchedStyle = card.isMatched 
       ? 'opacity-60 ring-2 ring-teal-400'
-      : 'bg-gray-900';
+      : 'bg-black/20';
       
     const cardContentColor = card.type === 'color' 
       ? getContrastingTextColor(card.pairId) 
@@ -186,7 +186,7 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
       >
         <div className={`relative w-full h-full transition-transform ${transitionClass} transform-style-3d ${card.isFlipped || card.isMatched ? 'rotate-y-180' : ''} ${isShaking ? 'animate-shake' : ''} ${isPulsing ? 'animate-pulse-once' : ''}`}>
           {/* Card Back - improved visuals with gradient and border */}
-          <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center text-4xl font-bold text-red-400 group-hover:from-gray-600 group-hover:to-gray-700 border-2 border-gray-600">
+          <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-gray-700/80 to-gray-800/90 rounded-lg flex items-center justify-center text-4xl font-bold text-red-400 group-hover:from-gray-600 group-hover:to-gray-700 border-2 border-gray-600">
             ?
           </div>
           {/* Card Front - improved visuals with border */}
@@ -204,30 +204,30 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
   };
 
   const renderDifficultySelection = () => (
-    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg animate-fade-in">
-      <h1 className="text-5xl font-bold mb-2 text-red-400">Kartu Warna</h1>
+    <div className="text-center glass-panel p-10 rounded-2xl shadow-lg animate-fade-in">
+      <h1 className="text-5xl font-bold mb-2 text-red-400 font-heading">Kartu Warna</h1>
       <p className="text-lg text-gray-300 mb-8 max-w-lg mx-auto">
         Uji ingatanmu! Cocokkan nama warna dengan kode HEX-nya.
       </p>
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-200 mb-4">Pilih Tingkat Kesulitan</h2>
+        <h2 className="text-xl font-semibold text-gray-200 mb-4 font-heading">Pilih Tingkat Kesulitan</h2>
         <div className="flex justify-center gap-2 md:gap-4">
           {(Object.keys(Difficulty) as Array<keyof typeof Difficulty>).map(level => (
             <button 
               key={level} 
               onClick={() => { setDifficulty(Difficulty[level]); setGameState(GameState.Instructions); soundService.playClickSound(); }}
-              className={`font-bold py-2 px-4 md:px-6 rounded-lg transition-all duration-200 border-2 border-gray-600 bg-gray-700 hover:bg-gray-600`}
+              className={`font-bold py-2 px-4 md:px-6 rounded-lg transition-all duration-200 border-2 border-gray-600 bg-gray-700/50 hover:bg-gray-700/80 hover:border-gray-500`}
             >{level}</button>
           ))}
         </div>
       </div>
-      <button onClick={onGoToMainMenu} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">Kembali</button>
+      <button onClick={onGoToMainMenu} className="bg-gray-600/50 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">Kembali</button>
     </div>
   );
   
   const renderInstructions = () => (
-    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg animate-fade-in max-w-md">
-        <h1 className="text-4xl font-bold mb-4 text-red-400">Cara Bermain</h1>
+    <div className="text-center glass-panel p-10 rounded-2xl shadow-lg animate-fade-in max-w-md">
+        <h1 className="text-4xl font-bold mb-4 text-red-400 font-heading">Cara Bermain</h1>
         <p className="text-lg text-gray-300 mb-6">
             Buka dua kartu untuk menemukan pasangan antara <strong>Nama Warna</strong> dan <strong>Kode HEX</strong> yang cocok. Selesaikan seluruh papan sebelum waktu habis!
         </p>
@@ -235,7 +235,7 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
         <p className="text-2xl font-semibold mb-6">Waktu: <span className="text-yellow-400">{DIFFICULTY_SETTINGS[difficulty].time} detik</span></p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button onClick={() => startGame(difficulty)} className="bg-red-500 text-white font-bold py-3 px-8 rounded-lg text-xl hover:bg-red-400 transition-all duration-300">Mulai!</button>
-            <button onClick={() => setGameState(GameState.DifficultySelection)} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">Pilih Level Lain</button>
+            <button onClick={() => setGameState(GameState.DifficultySelection)} className="bg-gray-600/50 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">Pilih Level Lain</button>
         </div>
     </div>
   );
@@ -245,10 +245,10 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
      return (
         <div className="w-full max-w-xl text-center animate-fade-in">
              <div className="flex justify-between items-center w-full text-lg font-semibold text-gray-300 mb-6 px-2">
-                <div className="bg-gray-800/50 backdrop-blur-sm px-4 py-2 rounded-lg">
+                <div className="glass-panel px-4 py-2 rounded-lg">
                     Tingkat: <span className="text-red-400 font-bold">{difficulty}</span>
                 </div>
-                <div className="bg-gray-800/50 backdrop-blur-sm px-4 py-2 rounded-lg">
+                <div className="glass-panel px-4 py-2 rounded-lg">
                     Waktu: <span className={`font-bold ${timeLeft < 10 ? 'text-yellow-400 animate-pulse' : 'text-red-400'}`}>{timeLeft}s</span>
                 </div>
             </div>
@@ -292,12 +292,12 @@ const FlipCardGame: React.FC<FlipCardGameProps> = ({ onGoToMainMenu }) => {
   };
   
   const renderEndScreen = (isWin: boolean) => (
-    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
-        <h1 className={`text-4xl font-bold mb-4 ${isWin ? 'text-green-400' : 'text-yellow-400'}`}>{isWin ? 'Kamu Berhasil!' : 'Waktu Habis!'}</h1>
+    <div className="text-center glass-panel p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
+        <h1 className={`text-4xl font-bold mb-4 font-heading ${isWin ? 'text-green-400' : 'text-yellow-400'}`}>{isWin ? 'Kamu Berhasil!' : 'Waktu Habis!'}</h1>
         <p className="text-xl text-gray-300 mb-8">{isWin ? `Kamu menyelesaikan level ${difficulty}!` : 'Jangan menyerah, coba lagi!'}</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button onClick={handlePlayAgain} className="bg-red-500 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-red-400 transition-all">Main Lagi</button>
-          <button onClick={onGoToMainMenu} className="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-500 transition-all">Menu Utama</button>
+          <button onClick={onGoToMainMenu} className="bg-gray-600/50 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-600/80 transition-all border border-gray-500">Menu Utama</button>
         </div>
       </div>
   );

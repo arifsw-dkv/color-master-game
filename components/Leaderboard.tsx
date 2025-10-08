@@ -9,8 +9,8 @@ interface LeaderboardProps {
 const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentPlayer }) => {
   return (
     <div className="w-full max-w-sm mx-auto text-left">
-      <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">Papan Peringkat</h2>
-      <div className="bg-gray-900/70 rounded-lg max-h-64 overflow-y-auto p-1">
+      <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center font-heading">Papan Peringkat</h2>
+      <div className="glass-panel rounded-lg max-h-64 overflow-y-auto p-1">
         <ul className="space-y-2 p-3">
           {scores.length > 0 ? (
             scores.map((entry, index) => {
@@ -22,8 +22,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentPlayer }) => {
               return (
                 <li
                   key={index}
-                  className={`flex justify-between items-center p-2 rounded-md ${
-                    isCurrentPlayer ? 'bg-cyan-500/30 ring-2 ring-cyan-400' : 'bg-gray-800'
+                  className={`flex justify-between items-center p-2.5 rounded-md transition-colors ${
+                    isCurrentPlayer ? 'bg-cyan-500/30 ring-2 ring-cyan-400' : 'bg-black/20'
                   }`}
                 >
                   <span className="font-semibold text-gray-300">

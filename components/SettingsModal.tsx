@@ -54,7 +54,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
 
   const renderSection = (title: string, children: React.ReactNode) => (
     <div className="mb-6">
-      <h3 className="text-xl font-semibold text-cyan-400 mb-3 border-b-2 border-gray-700 pb-2">{title}</h3>
+      <h3 className="text-xl font-semibold text-cyan-400 mb-3 border-b-2 border-gray-700 pb-2 font-heading">{title}</h3>
       {children}
     </div>
   );
@@ -94,11 +94,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in" onClick={onClose}>
       <div 
-        className="bg-gray-800 w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col animate-fade-in"
+        className="glass-panel w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col animate-fade-in"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold text-white">Pengaturan & Info Pemain</h2>
+            <h2 className="text-3xl font-bold text-white font-heading">Pengaturan & Info Pemain</h2>
             <button onClick={onClose} className="text-gray-400 hover:text-white text-3xl">&times;</button>
         </div>
 
@@ -131,7 +131,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                     {AVATAR_LIST.map(avatar => {
                         const AvatarComponent = avatar.component;
                         return (
-                            <button key={avatar.id} onClick={() => handleAvatarSelect(avatar.id)} className={`w-16 h-16 p-1 rounded-full overflow-hidden transition-all duration-200 ${playerData.avatarId === avatar.id ? 'bg-cyan-500 ring-4 ring-cyan-400' : 'bg-gray-700 hover:bg-cyan-800'}`}>
+                            <button key={avatar.id} onClick={() => handleAvatarSelect(avatar.id)} className={`w-16 h-16 p-1 rounded-full overflow-hidden transition-all duration-200 ${playerData.avatarId === avatar.id ? 'bg-cyan-500 ring-4 ring-cyan-400 scale-110' : 'bg-gray-700 hover:bg-cyan-800'}`}>
                                 <AvatarComponent />
                             </button>
                         );
@@ -157,11 +157,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
         </div>
         
         <div className="mt-auto pt-6 text-right">
-             <button onClick={onClose} className="bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-500 transition-colors">Tutup</button>
+             <button onClick={onClose} className="bg-gray-600/50 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600/80 transition-colors border border-gray-500">Tutup</button>
         </div>
       </div>
       <style>{`
         .range-thumb-cyan-500::-webkit-slider-thumb { background-color: #06b6d4; }
+        .range-thumb-cyan-500::-moz-range-thumb { background-color: #06b6d4; }
       `}</style>
     </div>
   );

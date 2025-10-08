@@ -16,7 +16,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({ playerData, onOpenSettings }) =
 
   return (
     <div 
-      className="absolute top-4 left-4 z-10 flex items-center gap-3 p-2 bg-gray-900/50 backdrop-blur-sm rounded-lg cursor-pointer hover:bg-gray-800/70 transition-colors duration-200 shadow-md"
+      className="absolute top-4 left-4 z-10 flex items-center gap-3 p-2 glass-panel rounded-lg cursor-pointer hover:bg-slate-700/70 transition-colors duration-200 shadow-md"
       onClick={onOpenSettings}
       role="button"
       aria-label="Buka Info Pemain dan Pengaturan"
@@ -25,7 +25,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({ playerData, onOpenSettings }) =
         <AvatarComponent />
       </div>
       <div>
-        <p className="font-bold text-white text-sm leading-tight">{playerData.name}</p>
+        <p className="font-bold text-white text-sm leading-tight font-heading">{playerData.name}</p>
         <p className="text-xs text-gray-400 leading-tight">ID: {playerData.id}</p>
       </div>
     </div>

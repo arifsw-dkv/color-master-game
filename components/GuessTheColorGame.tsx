@@ -155,17 +155,17 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
     switch (gameState) {
       case GameState.DifficultySelection:
         return (
-          <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg animate-fade-in">
-            <h1 className="text-5xl font-bold mb-2 text-cyan-400">Tebak Warna</h1>
+          <div className="text-center glass-panel p-10 rounded-2xl shadow-lg animate-fade-in">
+            <h1 className="text-5xl font-bold mb-2 text-cyan-400 font-heading">Tebak Warna</h1>
             <p className="text-lg text-gray-300 mb-8 max-w-lg mx-auto">
               Pilih tingkat kesulitan untuk memulai permainan.
             </p>
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-200 mb-4">Pilih Tingkat Kesulitan</h2>
+              <h2 className="text-xl font-semibold text-gray-200 mb-4 font-heading">Pilih Tingkat Kesulitan</h2>
               <div className="flex justify-center gap-2 md:gap-4">
                 {(Object.keys(Difficulty) as Array<keyof typeof Difficulty>).map(level => (
                   <button key={level} onClick={() => { soundService.playClickSound(); setSelectedDifficulty(Difficulty[level]) }}
-                    className={`font-bold py-2 px-4 md:px-6 rounded-lg transition-all duration-200 border-2 ${selectedDifficulty === Difficulty[level] ? 'bg-cyan-500 text-gray-900 border-cyan-500' : 'border-gray-600 bg-gray-700 hover:bg-gray-600'}`}
+                    className={`font-bold py-2 px-4 md:px-6 rounded-lg transition-all duration-200 border-2 ${selectedDifficulty === Difficulty[level] ? 'bg-cyan-400 text-gray-900 border-cyan-400 scale-110' : 'border-gray-600 bg-gray-700/50 hover:bg-gray-700/80 hover:border-gray-500'}`}
                   >{level}</button>
                 ))}
               </div>
@@ -174,7 +174,7 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
               <button onClick={() => handleStartGame(selectedDifficulty!)} disabled={!selectedDifficulty}
                 className="bg-cyan-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl hover:bg-cyan-400 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
               >Mulai Bermain</button>
-              <button onClick={onGoToMainMenu} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">Kembali</button>
+              <button onClick={onGoToMainMenu} className="bg-gray-600/50 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">Kembali</button>
             </div>
           </div>
         );
@@ -187,7 +187,7 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
             <ColorDisplay hexColor={quizItem.color.hex} />
             <div className={`grid ${quizItem.options.length > 4 ? 'grid-cols-3' : 'grid-cols-2'} gap-4`}>
               {quizItem.options.map(option => (
-                <button key={option} onClick={() => handleAnswer(option)} className="bg-gray-800 text-lg p-4 rounded-lg font-semibold hover:bg-cyan-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-400">{option}</button>
+                <button key={option} onClick={() => handleAnswer(option)} className="glass-panel text-lg p-4 rounded-lg font-semibold hover:bg-cyan-500/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-400 transform hover:scale-105">{option}</button>
               ))}
             </div>
             <div className="text-center mt-8">
@@ -215,8 +215,8 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
         
       case GameState.GameOver:
         return (
-          <div className="text-center bg-gray-800/50 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-cyan-400">Permainan Selesai!</h1>
+          <div className="text-center glass-panel p-8 md:p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-cyan-400 font-heading">Permainan Selesai!</h1>
             {!isScoreSubmitted ? (
                <>
                 <p className="text-xl text-gray-300 mb-2">Skor Akhir Kamu:</p>
@@ -228,12 +228,12 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
                </>
             ) : (
               <div className='w-full'>
-                <p className="text-xl text-gray-300 mb-2">Skor Akhir:</p>
+                <p className="text-xl text-gray-300 mb-2 font-heading">Skor Akhir:</p>
                 <p className="text-5xl font-bold text-yellow-400 mb-6">{score}</p>
                 <Leaderboard scores={leaderboard} currentPlayer={currentPlayerScoreRef.current} />
                 <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                     <button onClick={handlePlayAgain} className="w-full sm:w-auto bg-cyan-500 text-gray-900 font-bold py-3 px-6 rounded-lg text-lg hover:bg-cyan-400 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50">Main Lagi</button>
-                    <button onClick={onGoToMainMenu} className="w-full sm:w-auto bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">Menu Utama</button>
+                    <button onClick={onGoToMainMenu} className="w-full sm:w-auto bg-gray-600/50 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">Menu Utama</button>
                 </div>
               </div>
             )}

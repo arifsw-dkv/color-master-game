@@ -30,8 +30,8 @@ const GuestIcon = () => (
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   return (
-    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg animate-fade-in w-full max-w-md">
-      <h1 className="text-5xl font-bold mb-2 text-cyan-400 animate-pulse-glow">ColorMaster DKV</h1>
+    <div className="text-center glass-panel p-10 rounded-2xl shadow-lg animate-fade-in w-full max-w-md">
+      <h1 className="text-5xl font-bold mb-2 text-cyan-400 animate-pulse-glow font-heading">ColorMaster DKV</h1>
       <p className="text-xl font-light text-gray-300 mb-10">
         Selamat Datang!
       </p>
@@ -39,7 +39,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
       <div className="space-y-4">
         <button
           onClick={onLogin}
-          className="w-full flex items-center justify-center bg-white text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-200 transition-all duration-300 transform hover:-translate-y-1"
+          className="w-full flex items-center justify-center bg-white/90 text-gray-800 font-semibold py-3 px-4 rounded-lg hover:bg-white transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg"
         >
           <GoogleIcon />
           Masuk dengan Google
@@ -47,7 +47,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
         <button
           onClick={onLogin}
-          className="w-full flex items-center justify-center bg-[#1877F2] text-white font-semibold py-3 px-4 rounded-lg hover:bg-[#166fe5] transition-all duration-300 transform hover:-translate-y-1"
+          className="w-full flex items-center justify-center bg-[#1877F2] text-white font-semibold py-3 px-4 rounded-lg hover:bg-[#166fe5] transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg"
         >
           <FacebookIcon />
           Masuk dengan Facebook
@@ -55,7 +55,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
         <button
           onClick={onLogin}
-          className="w-full flex items-center justify-center bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-500 transition-all duration-300 transform hover:-translate-y-1"
+          className="w-full flex items-center justify-center bg-gray-600/80 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg"
         >
           <GuestIcon />
           Lanjutkan sebagai Tamu

@@ -85,8 +85,8 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ onPaletteGenerated,
     };
 
     return (
-        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg h-full">
-            <h2 className="text-2xl font-bold text-cyan-400 mb-4">Generator Palet</h2>
+        <div className="glass-panel p-6 rounded-2xl shadow-lg h-full">
+            <h2 className="text-2xl font-bold text-cyan-400 mb-4 font-heading">Generator Palet</h2>
             <div className="space-y-6">
                 {/* From Text */}
                 <div>
@@ -160,18 +160,18 @@ const CurrentPalette: React.FC<CurrentPaletteProps> = ({ palette }) => {
 
     if (palette.length === 0) {
         return (
-            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg h-full flex items-center justify-center">
+            <div className="glass-panel p-6 rounded-2xl shadow-lg h-full flex items-center justify-center">
                 <p className="text-gray-400 text-center">Palet Anda akan muncul di sini setelah dibuat.</p>
             </div>
         );
     }
     
     return (
-        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
-            <h2 className="text-2xl font-bold text-cyan-400 mb-4">Palet Saat Ini</h2>
+        <div className="glass-panel p-6 rounded-2xl shadow-lg">
+            <h2 className="text-2xl font-bold text-cyan-400 mb-4 font-heading">Palet Saat Ini</h2>
             <div className="space-y-2 mb-6">
                 {palette.map(color => (
-                    <div key={color.hex} className="flex items-center gap-4 p-2 bg-gray-900/50 rounded-lg">
+                    <div key={color.hex} className="flex items-center gap-4 p-2 bg-black/20 rounded-lg">
                         <div className="w-12 h-12 rounded-md border-2 border-gray-600" style={{ backgroundColor: color.hex }}></div>
                         <div className="flex-grow">
                             <p className="font-semibold text-white">{color.name}</p>
@@ -201,13 +201,12 @@ const AccessibilityChecker: React.FC<AccessibilityCheckerProps> = ({ palette }) 
     const [textColor, setTextColor] = useState('#FFFFFF');
     const [bgColor, setBgColor] = useState('#1F2937');
 
-    const { ratio, normal, large, graphical } = useMemo(() => {
+    const { ratio, normal, large } = useMemo(() => {
         const contrastRatio = calculateContrastRatio(textColor, bgColor);
         return {
             ratio: contrastRatio.toFixed(2),
             normal: { aa: contrastRatio >= 4.5, aaa: contrastRatio >= 7 },
             large: { aa: contrastRatio >= 3, aaa: contrastRatio >= 4.5 },
-            graphical: { aa: contrastRatio >= 3 }
         };
     }, [textColor, bgColor]);
 
@@ -223,8 +222,8 @@ const AccessibilityChecker: React.FC<AccessibilityCheckerProps> = ({ palette }) 
     };
 
     return (
-        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg mt-8">
-             <h2 className="text-2xl font-bold text-cyan-400 mb-4">Pemeriksa Kontras</h2>
+        <div className="glass-panel p-6 rounded-2xl shadow-lg mt-8">
+             <h2 className="text-2xl font-bold text-cyan-400 mb-4 font-heading">Pemeriksa Kontras</h2>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Color Inputs */}
                 <div>
@@ -252,17 +251,17 @@ const AccessibilityChecker: React.FC<AccessibilityCheckerProps> = ({ palette }) 
                 {/* Results */}
                 <div className="space-y-3">
                     <div className="p-4 rounded-lg text-center" style={{ backgroundColor: bgColor, color: textColor }}>
-                        <p className="font-bold text-xl">Teks Contoh</p>
-                        <p className="text-sm">Rasio Kontras: {ratio}</p>
+                        <p className="font-bold text-xl">Rasio Kontras</p>
+                        <p className="text-3xl font-mono">{ratio}</p>
                     </div>
-                    <div className="bg-gray-900/50 p-3 rounded-lg">
+                    <div className="bg-black/20 p-3 rounded-lg">
                         <h4 className="font-semibold text-gray-300 mb-2">Peringkat WCAG AA</h4>
                         <div className="flex gap-2">
                            <Rating label="Teks Normal" passed={normal.aa} />
                            <Rating label="Teks Besar" passed={large.aa} />
                         </div>
                     </div>
-                     <div className="bg-gray-900/50 p-3 rounded-lg">
+                     <div className="bg-black/20 p-3 rounded-lg">
                         <h4 className="font-semibold text-gray-300 mb-2">Peringkat WCAG AAA</h4>
                          <div className="flex gap-2">
                            <Rating label="Teks Normal" passed={normal.aaa} />
@@ -293,7 +292,7 @@ const StudioMode: React.FC<StudioModeProps> = ({ onGoToMainMenu }) => {
 
     return (
         <div className="w-full max-w-7xl animate-fade-in relative">
-             <h1 className="text-5xl font-bold mb-6 text-center text-cyan-400">Color Studio</h1>
+             <h1 className="text-5xl font-bold mb-6 text-center text-cyan-400 font-heading">Color Studio</h1>
             {isLoading && (
                 <div className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-20 rounded-2xl">
                     <LoadingSpinner />
@@ -319,7 +318,7 @@ const StudioMode: React.FC<StudioModeProps> = ({ onGoToMainMenu }) => {
                 </div>
             </div>
              <div className="text-center mt-8">
-                <button onClick={onGoToMainMenu} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">
+                <button onClick={onGoToMainMenu} className="bg-gray-600/50 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">
                   Kembali ke Menu Utama
                 </button>
             </div>

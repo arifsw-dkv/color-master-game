@@ -19,14 +19,14 @@ const ColorMixerLab: React.FC<ColorMixerLabProps> = ({ onGoToMainMenu }) => {
   const [mode, setMode] = useState<'selection' | 'challenge' | 'explore'>('selection');
 
   const renderModeSelection = () => (
-    <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg animate-fade-in max-w-lg">
-      <h1 className="text-5xl font-bold mb-4 text-yellow-400">Lab Pencampuran</h1>
+    <div className="text-center glass-panel p-10 rounded-2xl shadow-lg animate-fade-in max-w-lg">
+      <h1 className="text-5xl font-bold mb-4 text-yellow-400 font-heading">Lab Pencampuran</h1>
       <p className="text-lg text-gray-300 mb-8">Pilih mode untuk memulai.</p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button onClick={() => { soundService.playClickSound(); setMode('challenge'); }} className="bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl hover:bg-yellow-400 transition-all duration-300">
           Mode Tantangan
         </button>
-        <button onClick={() => { soundService.playClickSound(); setMode('explore'); }} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">
+        <button onClick={() => { soundService.playClickSound(); setMode('explore'); }} className="bg-gray-600/50 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">
           Mode Eksplorasi
         </button>
       </div>
@@ -40,6 +40,14 @@ const ColorMixerLab: React.FC<ColorMixerLabProps> = ({ onGoToMainMenu }) => {
 
   return (
     <>
+      <style>{`
+        .range-thumb-red-500::-webkit-slider-thumb { background-color: #ef4444; }
+        .range-thumb-green-500::-webkit-slider-thumb { background-color: #22c55e; }
+        .range-thumb-blue-500::-webkit-slider-thumb { background-color: #3b82f6; }
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.3); height: 8px; border-radius: 4px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; border: 2px solid white; cursor: pointer; margin-top: -6px; }
+      `}</style>
       {mode === 'selection' && renderModeSelection()}
       {mode === 'explore' && <ExploreMode onGoToSelection={() => setMode('selection')} onGoToMainMenu={onGoToMainMenu} />}
       {mode === 'challenge' && <ChallengeMode onGoToSelection={() => setMode('selection')} onGoToMainMenu={onGoToMainMenu} />}
@@ -60,8 +68,8 @@ const ExploreMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: () 
   };
 
   return (
-    <div className="w-full max-w-lg bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg animate-fade-in">
-      <h1 className="text-4xl font-bold mb-4 text-center text-yellow-400">Mode Eksplorasi</h1>
+    <div className="w-full max-w-lg glass-panel p-8 rounded-2xl shadow-lg animate-fade-in">
+      <h1 className="text-4xl font-bold mb-4 text-center text-yellow-400 font-heading">Mode Eksplorasi</h1>
       <p className="text-center text-gray-300 mb-8">Geser slider untuk mencampur warna secara bebas.</p>
       <div className="w-full h-40 rounded-lg shadow-inner mb-8 transition-colors duration-200 border-4 border-gray-700" style={{ backgroundColor: hexColor }}></div>
       <div className="space-y-6 mb-8">
@@ -69,11 +77,11 @@ const ExploreMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: () 
         <ColorSlider label="G" value={g} colorClass="green" onChange={(val) => handleSliderChange(val, setG)} />
         <ColorSlider label="B" value={b} colorClass="blue" onChange={(val) => handleSliderChange(val, setB)} />
       </div>
-      <div className="text-center bg-gray-900/70 p-4 rounded-lg">
+      <div className="text-center bg-black/30 p-4 rounded-lg">
         <p className="text-2xl font-mono tracking-widest">{hexColor}</p>
       </div>
       <div className="text-center mt-8">
-        <button onClick={onGoToSelection} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-500 transition-all duration-300">
+        <button onClick={onGoToSelection} className="bg-gray-600/50 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-600/80 transition-all duration-300 border border-gray-500">
           Pilih Mode Lain
         </button>
       </div>
@@ -141,23 +149,23 @@ const ChallengeMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: (
 
     if (gameState === 'gameOver') {
         return (
-            <div className="text-center bg-gray-800/50 backdrop-blur-sm p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
-                <h1 className="text-4xl font-bold mb-4 text-yellow-400">Tantangan Selesai!</h1>
+            <div className="text-center glass-panel p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
+                <h1 className="text-4xl font-bold mb-4 text-yellow-400 font-heading">Tantangan Selesai!</h1>
                 <p className="text-xl text-gray-300 mb-2">Total Skor Kamu:</p>
                 <p className="text-7xl font-bold text-cyan-400 mb-8">{totalScore}</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button onClick={handlePlayAgain} className="bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg text-lg hover:bg-yellow-400 transition-all">Main Lagi</button>
-                    <button onClick={onGoToSelection} className="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-500 transition-all">Pilih Mode Lain</button>
+                    <button onClick={onGoToSelection} className="bg-gray-600/50 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-600/80 transition-all border border-gray-500">Pilih Mode Lain</button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="w-full max-w-2xl bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg animate-fade-in">
+        <div className="w-full max-w-2xl glass-panel p-8 rounded-2xl shadow-lg animate-fade-in">
             <div className="flex justify-between items-center mb-6">
-                 <h1 className="text-3xl font-bold text-yellow-400">Mode Tantangan</h1>
-                 <div className="bg-gray-900/50 px-4 py-2 rounded-lg text-lg">Ronde: <span className="font-bold text-cyan-400">{currentRound}</span> / {TOTAL_CHALLENGE_ROUNDS}</div>
+                 <h1 className="text-3xl font-bold text-yellow-400 font-heading">Mode Tantangan</h1>
+                 <div className="bg-black/20 px-4 py-2 rounded-lg text-lg">Ronde: <span className="font-bold text-cyan-400">{currentRound}</span> / {TOTAL_CHALLENGE_ROUNDS}</div>
             </div>
             
             <div className="grid grid-cols-2 gap-6 mb-6">
@@ -165,7 +173,7 @@ const ChallengeMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: (
                 <div className="text-center">
                     <h2 className="text-xl font-semibold text-gray-300 mb-2">Target</h2>
                     <div className="w-full h-32 rounded-lg border-4 border-gray-700" style={{backgroundColor: targetHex}}></div>
-                    <div className="bg-gray-900/50 mt-2 p-2 rounded-lg text-sm">
+                    <div className="bg-black/20 mt-2 p-2 rounded-lg text-sm">
                         <p className="font-mono">{targetHex}</p>
                         <p className="font-sans text-xs text-gray-400">R:{targetColor.r} G:{targetColor.g} B:{targetColor.b}</p>
                     </div>
@@ -174,7 +182,7 @@ const ChallengeMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: (
                  <div className="text-center">
                     <h2 className="text-xl font-semibold text-gray-300 mb-2">Milikmu</h2>
                     <div className="w-full h-32 rounded-lg border-4 border-cyan-500/50" style={{backgroundColor: playerHex}}></div>
-                     <div className="bg-gray-900/50 mt-2 p-2 rounded-lg text-sm">
+                     <div className="bg-black/20 mt-2 p-2 rounded-lg text-sm">
                         <p className="font-mono">{playerHex}</p>
                         <p className="font-sans text-xs text-gray-400">R:{playerColor.r} G:{playerColor.g} B:{playerColor.b}</p>
                     </div>
@@ -196,8 +204,8 @@ const ChallengeMode = ({ onGoToSelection, onGoToMainMenu }: { onGoToSelection: (
                     </button>
                 </>
             ) : ( // roundEnd state
-                 <div className="text-center p-4 bg-gray-900/50 rounded-lg animate-fade-in">
-                    <h2 className="text-2xl font-bold text-cyan-400">Ronde Selesai!</h2>
+                 <div className="text-center p-4 bg-black/30 rounded-lg animate-fade-in">
+                    <h2 className="text-2xl font-bold text-cyan-400 font-heading">Ronde Selesai!</h2>
                     <p className="text-lg">Akurasi Kamu: {accuracy.toFixed(1)}%</p>
                     <p className="text-4xl font-bold text-yellow-400 my-2">+ {roundScore} <span className="text-xl">Poin</span></p>
                      <button onClick={handleNextRound} className="w-full mt-4 bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg text-xl hover:bg-yellow-400 transition-all">
@@ -231,7 +239,7 @@ const ColorSlider: React.FC<ColorSliderProps> = ({ label, value, colorClass, onC
 
   return (
     <div className="flex items-center gap-4">
-      <label htmlFor={`${label}-slider`} className={`w-16 font-bold ${colors[colorClass]}`}>{label}: {value}</label>
+      <label htmlFor={`${label}-slider`} className={`w-16 font-bold text-lg ${colors[colorClass]}`}>{label}: {value}</label>
       <input
         id={`${label}-slider`}
         type="range"

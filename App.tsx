@@ -88,17 +88,13 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-dots relative">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
        <style>{`
-        .bg-dots {
-          background-image: radial-gradient(circle at 1px 1px, rgba(203, 213, 225, 0.1) 1px, transparent 0);
-          background-size: 20px 20px;
-        }
         .animate-fade-in {
-          animation: fadeIn 0.5s ease-in-out;
+          animation: fadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
         }
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
+          from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
        `}</style>
