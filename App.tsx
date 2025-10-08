@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { GameMode, PlayerData } from './types';
+import { GameMode, PlayerData, CampaignLevel } from './types';
 import * as soundService from './services/soundService';
 import * as musicService from './services/musicService';
 import * as playerService from './services/playerService';
+import * as progressService from './services/progressService';
 import MainMenu from './components/MainMenu';
 import GuessTheColorGame from './components/GuessTheColorGame';
 import ColorWheelGame from './components/ColorWheelGame';
@@ -13,12 +14,15 @@ import SettingsModal from './components/SettingsModal';
 import LoginScreen from './components/LoginScreen';
 import InstructionsScreen from './components/InstructionsScreen';
 import StudioMode from './components/StudioMode';
+import LearningPathScreen from './components/LearningPathScreen';
+import ChatbotScreen from './components/ChatbotScreen';
 
 
 const App: React.FC = () => {
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Login);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [playerData, setPlayerData] = useState<PlayerData | null>(null);
+  const [currentCampaignLevel, setCurrentCampaignLevel] = useState<CampaignLevel | null>(null);
   
   useEffect(() => {
     // Cleanup function to stop music when the entire app unmounts
@@ -52,7 +56,7 @@ const App: React.FC = () => {
 
     // Music service initializes itself lazily.
     // Directly control music based on the new mode, ensuring it's tied to a user gesture.
-    if (mode === GameMode.MainMenu) {
+    if (mode === GameMode.MainMenu || mode === GameMode.LearningPath) {
       musicService.playMenuMusic();
     } else {
       musicService.stopMusic();
@@ -62,10 +66,54 @@ const App: React.FC = () => {
   };
   
   const handleGoToMainMenu = () => {
+    setCurrentCampaignLevel(null);
     handleSelectMode(GameMode.MainMenu);
   }
 
+  const handleStartCampaignLevel = (level: CampaignLevel) => {
+    setCurrentCampaignLevel(level);
+    handleSelectMode(level.game);
+  };
+
+  const handleCampaignLevelComplete = (success: boolean) => {
+    if (success && currentCampaignLevel) {
+      progressService.saveProgress(currentCampaignLevel.id);
+    }
+    setCurrentCampaignLevel(null);
+    setGameMode(GameMode.LearningPath); // Go back to the learning path map
+    musicService.playMenuMusic();
+  };
+
+
   const renderContent = () => {
+    // Campaign mode active, render the specific game for the level
+    if (currentCampaignLevel) {
+      const campaignProps = {
+        campaignLevel: currentCampaignLevel,
+        onCampaignLevelComplete: handleCampaignLevelComplete,
+        onGoToMainMenu: handleGoToMainMenu, // This can act as "Quit Level"
+      };
+      switch (currentCampaignLevel.game) {
+        case GameMode.GuessTheColor:
+          // Pass campaign props to the game component
+          return <GuessTheColorGame {...campaignProps} />;
+        // TODO: Add cases for other games to make them campaign-compatible
+        // For now, they will just quit back to the map on completion
+        case GameMode.ColorWheel:
+          return <ColorWheelGame onGoToMainMenu={() => handleCampaignLevelComplete(false)} />;
+        case GameMode.ColorMixer:
+          return <ColorMixerLab onGoToMainMenu={() => handleCampaignLevelComplete(false)} />;
+        case GameMode.FlipCard:
+          return <FlipCardGame onGoToMainMenu={() => handleCampaignLevelComplete(false)} />;
+        default:
+          // Fallback if a game is not yet campaign-ready
+          handleCampaignLevelComplete(false);
+          return <LearningPathScreen onStartLevel={handleStartCampaignLevel} onGoToMainMenu={handleGoToMainMenu} />;
+      }
+    }
+
+
+    // Regular mode
     switch (gameMode) {
       case GameMode.Login:
         return <LoginScreen onLogin={() => handleSelectMode(GameMode.MainMenu)} />;
@@ -81,6 +129,10 @@ const App: React.FC = () => {
         return <InstructionsScreen onGoToMainMenu={handleGoToMainMenu} />;
       case GameMode.Studio:
         return <StudioMode onGoToMainMenu={handleGoToMainMenu} />;
+      case GameMode.LearningPath:
+        return <LearningPathScreen onStartLevel={handleStartCampaignLevel} onGoToMainMenu={handleGoToMainMenu} />;
+      case GameMode.Chatbot:
+        return <ChatbotScreen onGoToMainMenu={handleGoToMainMenu} />;
       case GameMode.MainMenu:
       default:
         return <MainMenu onSelectMode={handleSelectMode} />;

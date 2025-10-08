@@ -5,6 +5,12 @@ interface MainMenuProps {
   onSelectMode: (mode: GameMode) => void;
 }
 
+const IconCampaign = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 21V3l2-2 2 2v18l-2 2-2-2zM5 21V7l2-2 2 2v14l-2 2-2-2zM17 21V11l2-2 2 2v10l-2 2-2-2z" /></svg>
+);
+const IconChatbot = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+);
 const IconGuess = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
 );
@@ -32,6 +38,7 @@ const GameModeButton = ({ onClick, color, icon, title, description }: { onClick:
     yellow: { text: 'text-yellow-400', shadow: 'hover:shadow-yellow-500/30' },
     indigo: { text: 'text-indigo-400', shadow: 'hover:shadow-indigo-500/30' },
     green: { text: 'text-green-400', shadow: 'hover:shadow-green-500/30' },
+    orange: { text: 'text-orange-400', shadow: 'hover:shadow-orange-500/30' },
   }[color] || { text: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/30' };
 
   return (
@@ -48,19 +55,21 @@ const GameModeButton = ({ onClick, color, icon, title, description }: { onClick:
 
 const MainMenu: React.FC<MainMenuProps> = ({ onSelectMode }) => {
   return (
-    <div className="text-center glass-panel p-8 md:p-10 rounded-3xl animate-fade-in max-w-4xl w-full">
+    <div className="text-center glass-panel p-8 md:p-10 rounded-3xl animate-fade-in max-w-5xl w-full">
       <h1 className="text-6xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-400 font-heading animate-pulse-glow">ColorMaster DKV</h1>
       <p className="text-xl font-light text-gray-300 mb-10 max-w-lg mx-auto">
         Platform Edukasi Interaktif untuk Desain Komunikasi Visual
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <GameModeButton onClick={() => onSelectMode(GameMode.LearningPath)} color="yellow" icon={<IconCampaign />} title="Kampanye Belajar" description="Ikuti kurikulum terstruktur dari dasar." />
+        <GameModeButton onClick={() => onSelectMode(GameMode.Chatbot)} color="green" icon={<IconChatbot />} title="Tanya Ahli" description="Tanya apapun tentang DKV pada AI." />
         <GameModeButton onClick={() => onSelectMode(GameMode.Studio)} color="indigo" icon={<IconStudio />} title="Color Studio" description="Alat pro untuk palet & aksesibilitas." />
-        <GameModeButton onClick={() => onSelectMode(GameMode.GuessTheColor)} color="cyan" icon={<IconGuess />} title="Tebak Warna" description="Uji kecepatanmu menebak warna dari kode HEX." />
-        <GameModeButton onClick={() => onSelectMode(GameMode.FlipCard)} color="red" icon={<IconFlip />} title="Kartu Warna" description="Cocokkan nama warna dengan kode HEX-nya." />
-        <GameModeButton onClick={() => onSelectMode(GameMode.ColorWheel)} color="purple" icon={<IconWheel />} title="Roda Warna" description="Pelajari hubungan antar warna dengan kuis." />
-        <GameModeButton onClick={() => onSelectMode(GameMode.ColorMixer)} color="yellow" icon={<IconMixer />} title="Lab Pencampuran" description="Eksplorasi pencampuran warna RGB." />
-        <GameModeButton onClick={() => onSelectMode(GameMode.Instructions)} color="green" icon={<IconInstructions />} title="Instruksi" description="Pelajari cara bermain & menggunakan alat." />
+        <GameModeButton onClick={() => onSelectMode(GameMode.GuessTheColor)} color="cyan" icon={<IconGuess />} title="Tebak Warna" description="Uji tebak warna dari kode HEX." />
+        <GameModeButton onClick={() => onSelectMode(GameMode.FlipCard)} color="red" icon={<IconFlip />} title="Kartu Warna" description="Cocokkan nama warna & kode HEX." />
+        <GameModeButton onClick={() => onSelectMode(GameMode.ColorWheel)} color="purple" icon={<IconWheel />} title="Roda Warna" description="Pelajari hubungan antar warna." />
+        <GameModeButton onClick={() => onSelectMode(GameMode.ColorMixer)} color="orange" icon={<IconMixer />} title="Lab Pencampuran" description="Eksplorasi pencampuran RGB." />
+        <GameModeButton onClick={() => onSelectMode(GameMode.Instructions)} color="cyan" icon={<IconInstructions />} title="Instruksi" description="Pelajari cara bermain & alat." />
       </div>
 
       <style>{`

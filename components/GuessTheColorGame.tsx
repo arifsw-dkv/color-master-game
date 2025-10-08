@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { QuizItem, ColorInfo, Difficulty, ScoreEntry } from '../types';
+import { QuizItem, ColorInfo, Difficulty, ScoreEntry, CampaignLevel } from '../types';
 import { COLORS, TOTAL_ROUNDS } from '../constants';
 import { getColorFacts } from '../services/geminiService';
 import * as soundService from '../services/soundService';
@@ -25,24 +25,31 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 interface GuessTheColorGameProps {
   onGoToMainMenu: () => void;
+  campaignLevel?: CampaignLevel | null;
+  onCampaignLevelComplete?: (success: boolean) => void;
 }
 
-const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu }) => {
-  const [gameState, setGameState] = useState<GameState>(GameState.DifficultySelection);
+const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu, campaignLevel, onCampaignLevelComplete }) => {
+  const isCampaignMode = !!campaignLevel && !!onCampaignLevelComplete;
+  
+  const [gameState, setGameState] = useState<GameState>(isCampaignMode ? GameState.Playing : GameState.DifficultySelection);
   const [score, setScore] = useState(0);
-  const [currentRound, setCurrentRound] = useState(0);
+  const [currentRound, setCurrentRound] = useState(1);
   const [quizItem, setQuizItem] = useState<QuizItem | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [feedbackText, setFeedbackText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [usedColors, setUsedColors] = useState<ColorInfo[]>([]);
-  const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Medium);
+  const [difficulty, setDifficulty] = useState<Difficulty>(campaignLevel?.config?.difficulty || Difficulty.Medium);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
   const [playerName, setPlayerName] = useState('');
   const [leaderboard, setLeaderboard] = useState<ScoreEntry[]>([]);
   const [isScoreSubmitted, setIsScoreSubmitted] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const currentPlayerScoreRef = useRef<ScoreEntry | null>(null);
+
+  const totalRounds = campaignLevel?.config?.rounds || TOTAL_ROUNDS;
+  const winThreshold = Math.ceil(totalRounds * 0.6) * 10; // Win if score is 60% or higher
 
   const generateQuizItem = useCallback(() => {
     setUsedColors(prevUsedColors => {
@@ -94,10 +101,21 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
   };
   
   useEffect(() => {
-    if (gameState === GameState.Playing && currentRound > 0 && currentRound <= TOTAL_ROUNDS) {
+    if (gameState === GameState.Playing && currentRound > 0 && currentRound <= totalRounds) {
       generateQuizItem();
     }
-  }, [gameState, currentRound, generateQuizItem]);
+  }, [gameState, currentRound, generateQuizItem, totalRounds]);
+
+  useEffect(() => {
+    // This effect handles the end of the game, deciding whether to show leaderboard or trigger campaign completion
+    if (gameState === GameState.GameOver) {
+      if (isCampaignMode) {
+        onCampaignLevelComplete(score >= winThreshold);
+      } else {
+        loadLeaderboard();
+      }
+    }
+  }, [gameState, isCampaignMode, onCampaignLevelComplete, score, winThreshold]);
 
   const handleAnswer = async (selectedOption: string) => {
     if (!quizItem) return;
@@ -138,9 +156,8 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
 
   const nextRound = () => {
     soundService.playClickSound();
-    if (currentRound >= TOTAL_ROUNDS) {
+    if (currentRound >= totalRounds) {
       setGameState(GameState.GameOver);
-      loadLeaderboard();
     } else {
       setCurrentRound(r => r + 1);
       setQuizItem(null);
@@ -183,7 +200,13 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
         if (!quizItem) return <div className="text-center"><LoadingSpinner /> <p>Membuat soal...</p></div>;
         return (
           <div className="w-full max-w-2xl animate-fade-in">
-            <Scoreboard score={score} round={currentRound} totalRounds={TOTAL_ROUNDS} />
+            {isCampaignMode && campaignLevel && (
+              <div className="text-center mb-4 p-3 glass-panel rounded-lg">
+                <h2 className="text-xl font-bold text-yellow-400 font-heading">{campaignLevel.title}</h2>
+                <p className="text-sm text-gray-300">{campaignLevel.description}</p>
+              </div>
+            )}
+            <Scoreboard score={score} round={currentRound} totalRounds={totalRounds} />
             <ColorDisplay hexColor={quizItem.color.hex} />
             <div className={`grid ${quizItem.options.length > 4 ? 'grid-cols-3' : 'grid-cols-2'} gap-4`}>
               {quizItem.options.map(option => (
@@ -191,8 +214,8 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
               ))}
             </div>
             <div className="text-center mt-8">
-              <button onClick={onGoToMainMenu} className="text-gray-400 hover:text-cyan-400 font-semibold transition-colors duration-200">
-                Kembali ke Menu Utama
+              <button onClick={isCampaignMode ? () => onCampaignLevelComplete(false) : onGoToMainMenu} className="text-gray-400 hover:text-cyan-400 font-semibold transition-colors duration-200">
+                {isCampaignMode ? 'Keluar Level' : 'Kembali ke Menu Utama'}
               </button>
             </div>
           </div>
@@ -209,11 +232,16 @@ const GuessTheColorGame: React.FC<GuessTheColorGameProps> = ({ onGoToMainMenu })
             feedbackText={feedbackText}
             isLoading={isLoading}
             onNextRound={nextRound}
-            isLastRound={currentRound >= TOTAL_ROUNDS}
+            isLastRound={currentRound >= totalRounds}
           />
         );
         
       case GameState.GameOver:
+        // In campaign mode, this state is just a trigger and will be handled by the useEffect.
+        // In normal mode, it renders the leaderboard.
+        if (isCampaignMode) {
+          return <div className="text-center"><LoadingSpinner /> <p>Menyelesaikan level...</p></div>;
+        }
         return (
           <div className="text-center glass-panel p-8 md:p-10 rounded-2xl shadow-lg w-full max-w-md animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-cyan-400 font-heading">Permainan Selesai!</h1>

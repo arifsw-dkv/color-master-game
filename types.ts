@@ -17,6 +17,8 @@ export enum GameMode {
   FlipCard,
   Instructions,
   Studio,
+  LearningPath,
+  Chatbot,
 }
 
 export enum Difficulty {
@@ -43,4 +45,16 @@ export interface SettingsData {
   graphics: 'Rendah' | 'Sedang' | 'Tinggi';
   effects: 'Rendah' | 'Sedang' | 'Tinggi';
   fps: '30' | '60' | 'Tidak Terbatas';
+}
+
+export interface CampaignLevel {
+  id: number;
+  title: string;
+  description: string;
+  game: GameMode;
+  config: {
+    difficulty?: Difficulty;
+    rounds?: number;
+    // Add other game-specific configs here as needed
+  };
 }

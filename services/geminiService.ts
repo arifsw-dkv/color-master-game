@@ -129,3 +129,20 @@ export async function getPaletteFromImage(base64Image: string, mimeType: string)
     throw new Error("Gagal mengekstrak palet dari gambar. Coba gambar lain.");
   }
 }
+
+
+export async function getChatbotResponse(question: string): Promise<string> {
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: question,
+      config: {
+        systemInstruction: "You are an expert in Visual Communication Design (DKV), acting as a friendly and helpful tutor for a university student. Your name is 'Gemini Sensei'. Answer questions in Bahasa Indonesia. Keep your answers concise, clear, and encouraging. Use markdown for formatting like **bold** text and lists.",
+      }
+    });
+    return response.text;
+  } catch (error) {
+    console.error("Error fetching chatbot response from Gemini API:", error);
+    return "Maaf, saya sedang mengalami sedikit gangguan. Bisakah kamu mengulangi pertanyaanmu?";
+  }
+}
